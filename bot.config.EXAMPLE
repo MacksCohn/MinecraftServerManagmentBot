@@ -1,4 +1,7 @@
+
 server_check_url: https://ismcserver.online/
-start_executable: 
-server_directory_path: 
-server_logs_path: 
+bat_file: ./start.bat
+server_directory_path: /mnt/c/Users/maxco/Desktop/Pearls Before Swine/
+server_logs_path: /mnt/c/Users/maxco/Desktop/Pearls Before Swine/logs/
+admin_discord_id: 463869439255904257  
+bot_channel_name: bot-stuff

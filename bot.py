@@ -35,6 +35,12 @@ async def on_ready():
     global SERVER_IP_ADDRESS
     SERVER_IP_ADDRESS = os.getenv('IP')
     
+    global ADMIN_DISCORD_ID
+    ADMIN_DISCORD_ID = get_global_from_config('admin_discord_id') 
+
+    global BOT_CHANNEL
+    BOT_CHANNEL = get_global_from_config('bot_channel_name')
+
     threading.Timer(60 * 20, on_save_timer).start()
     on_save_timer()
 
@@ -45,10 +51,10 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    if str(message.channel) == 'bot-stuff':
+    if str(message.channel) == BOT_CHANNEL:
         print("BEEP BOOP MESSAGE DETECTED")
         print('message author id: ' + str(message.author.id))
-        if ('/' in message.content) and (message.author.id == 463869439255904257):
+        if ('/' in message.content) and (message.author.id == ADMIN_DISCORD_ID):
             command = message.content[message.content.index('/')+1::]
             print("Sending command: " + str(command))
             server_command(command)
@@ -60,8 +66,6 @@ async def on_message(message):
         if message.content.lower() == 'clear':
             await message.channel.purge()
             await send_prompt(message.channel)
-
-    
     
 async def send_prompt(channel):
     view = discord.ui.View(timeout=None)
@@ -92,7 +96,7 @@ async def on_status_button(interaction : discord.Interaction):
     text = '# Server Status Bot\n> ## The server is currently: \n> ' + emoji + ' **' + status_string + '**'
     text += '\n> ###  :wireless:  ' + SERVER_IP_ADDRESS + '\n'
     text += '\n> ### **Players Online**: \n' + pull_player_list() + '\n'
-    await interaction.response.edit_message(content=text, )
+    await interaction.response.edit_message(content=text)
 
 async def on_logs_button(interaction : discord.Interaction):
     output = open(SERVER_LOGS_PATH + 'latest.log').read()
@@ -111,7 +115,8 @@ async def on_logs_button(interaction : discord.Interaction):
     await interaction.response.send_message(send)
 
 async def on_start_button(interaction : discord.Interaction):
-    if interaction.user.id == 463869439255904257 or interaction.user.id == 767538898737037362:
+    additional_admin = 767538898737037362 
+    if interaction.user.id == ADMIN_DISCORD_ID or interaction.user.id == additional_admin:
         os.chdir(SERVER_DIRECTORY_PATH)
         os.system(BATCH_PATH)
         await interaction.response.send_modal(discord.ui.Modal(title='Server Start signal sent', timeout=2))
@@ -150,7 +155,6 @@ def get_global_from_config(config_string):
     return global_element
 
 def get_name_between_spans(string):
-    original_string = string
     string = string[string.index('>')+1::]
     string = string[string.index('>')+1::]
     string = string[:string.index('<'):]
