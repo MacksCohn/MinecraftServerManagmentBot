@@ -158,7 +158,7 @@ def get_name_between_spans(string):
     return string
 
 def server_command(cmd):
-    os.system('screen -S minecraft-server-screen -X stuff "{}\n"'.format(cmd))
+    os.system(f'screen -S minecraft-server-screen -X stuff "{cmd}\n"')
 
 def on_save_timer():
     server_command('save-all')
