@@ -1,0 +1,4 @@
+server_check_url: https://ismcserver.online/
+start_executable: 
+server_directory_path: 
+server_logs_path: 
