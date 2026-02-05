@@ -35,7 +35,7 @@ async def on_ready():
     SERVER_IP_ADDRESS = os.getenv('IP')
     
     global ADMIN_DISCORD_ID
-    ADMIN_DISCORD_ID = get_global_from_config('admin_discord_id') 
+    ADMIN_DISCORD_ID = int(get_global_from_config('admin_discord_id'))
 
     global BOT_CHANNEL
     BOT_CHANNEL = get_global_from_config('bot_channel_name')
