@@ -18,7 +18,6 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    channel = discord.utils.get(client.get_all_channels(), name='bot-stuff')
     
     global SERVER_CHECK_URL
     SERVER_CHECK_URL = get_global_from_config('server_check_url')
@@ -43,6 +42,8 @@ async def on_ready():
 
     threading.Timer(60 * 20, on_save_timer).start()
     on_save_timer()
+
+    channel = discord.utils.get(client.get_all_channels(), name=BOT_CHANNEL)
 
     await channel.purge()
     await send_prompt(channel)
@@ -125,12 +126,15 @@ async def on_start_button(interaction : discord.Interaction):
 # Sync functions
 def pull_status():
     try:
-        pull = requests.get(SERVER_CHECK_URL+SERVER_IP_ADDRESS)
-        text = pull.text
-        status = text.index('Online')
-        return 'Online'
-    except:
-        return 'Offline'
+        response = requests.get(SERVER_CHECK_URL+SERVER_IP_ADDRESS)
+        
+        response.raise_for_status()
+        data = response.json()
+        return "Online" if data.get('online') else "Offline"
+            
+    except Exception as e:
+        print(f"Error fetching status: {e}")
+        return "Unknown/Error"
 
 def pull_player_list():
     try:

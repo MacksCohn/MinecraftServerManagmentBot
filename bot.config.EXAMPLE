@@ -1,7 +1,7 @@
 
-server_check_url: https://ismcserver.online/
-bat_file: 
+server_check_url: https://api.mcstatus.io/status/java/
+bat_file: ./start.bat
 server_directory_path: 
 server_logs_path: 
 admin_discord_id: 
-bot_channel_name: 
+bot_channel_name: minecraft-bot-stuff
