@@ -145,7 +145,7 @@ def pull_player_list():
         output = output[output.rindex('online:')+len('online:')::]
         names = output.split(',')
         for name in names:
-            player_list += '> * ' + name + '\n'
+            player_list += '> * ' + name[name.index(']') + 1::] + '\n'
 
         return player_list
     except:
