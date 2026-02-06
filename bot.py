@@ -32,7 +32,11 @@ async def on_ready():
     SERVER_DIRECTORY_PATH = get_global_from_config('server_directory_path')
 
     global SERVER_IP_ADDRESS
-    SERVER_IP_ADDRESS = os.getenv('IP')
+    try:
+        SERVER_IP_ADDRESS = requests.get('https://api.ipify.org').text
+    except:
+        SERVER_IP_ADDRESS = os.getenv('IP')
+    
     
     global ADMIN_DISCORD_ID
     ADMIN_DISCORD_ID = int(get_global_from_config('admin_discord_id'))
