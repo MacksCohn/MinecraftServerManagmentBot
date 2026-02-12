@@ -93,7 +93,6 @@ async def send_prompt(channel):
 async def on_status_button(interaction : discord.Interaction):
     status_string : str = pull_status()
     emoji = ''
-    # channel = discord.utils.get(client.get_all_channels(), name='bot-stuff')
     if status_string == 'Online':
         emoji = ':white_check_mark: '
     else:
@@ -145,6 +144,7 @@ def pull_player_list():
         names = []
         player_list=''
         server_command('list')
+        time.sleep(.2)
         output = open(SERVER_LOGS_PATH + 'latest.log').read()
         output = output[output.rindex('online:')+len('online:')::]
         names = output.split(',')
