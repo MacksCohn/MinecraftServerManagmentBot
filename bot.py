@@ -63,7 +63,7 @@ async def on_message(message):
             command = message.content[message.content.index('/')+1::]
             print("Sending command: " + str(command))
             server_command(command)
-            time.sleep(0.2)
+            time.sleep(0.5)
             output = open(SERVER_LOGS_PATH + 'latest.log').read()
             output = output[output.rindex('[')::]
             await message.channel.purge(limit=1)
@@ -115,16 +115,30 @@ async def on_logs_button(interaction : discord.Interaction):
     send = '```' + send + '```'
     await interaction.channel.purge()
     await send_prompt(interaction.channel)
-    time.sleep(0.2)
+    time.sleep(0.5)
     await interaction.response.send_message(send)
 
 async def on_start_button(interaction : discord.Interaction):
     additional_admin = 767538898737037362 
+    LIGHT_GREEN = discord.Color.from_rgb(144, 238, 144)
+    LIGHT_RED = discord.Color.from_rgb(238, 144, 144)
     if interaction.user.id == ADMIN_DISCORD_ID or interaction.user.id == additional_admin:
         os.chdir(SERVER_DIRECTORY_PATH)
         os.system(BATCH_PATH)
-        await interaction.response.send_modal(discord.ui.Modal(title='Server Start signal sent', timeout=2))
+        embed = discord.Embed(
+            title="Status",
+            description="Server starting...",
+            color=LIGHT_GREEN
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         print(BATCH_PATH)
+    else:
+        embed = discord.Embed(
+            title="Status",
+            description="You do not have permissions to start the server.",
+            color=LIGHT_RED
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # Sync functions
 def pull_status():
@@ -144,7 +158,7 @@ def pull_player_list():
         names = []
         player_list=''
         server_command('list')
-        time.sleep(.2)
+        time.sleep(.5)
         output = open(SERVER_LOGS_PATH + 'latest.log').read()
         output = output[output.rindex('online:')+len('online:')::]
         names = output.split(',')
