@@ -158,16 +158,17 @@ def pull_player_list():
         names = []
         player_list=''
         server_command('list')
-        time.sleep(.5)
+        time.sleep(.8)
         output = open(SERVER_LOGS_PATH + 'latest.log').read()
-        output = output[output.rindex('online:')+len('online:')::]
+        output = output[output.rindex('online:')+len('online:')::].strip()
         names = output.split(',')
         for name in names:
-            player_list += '> * ' + name[name.index(']') + 1::] + '\n'
+            player_list += '> * ' + name + '\n'
 
         return player_list
-    except:
-        return ''
+    except Exception as e:
+        print(e)
+        return 'player finding error'
 
 def get_global_from_config(config_string):
     global_element = open('bot.config').read()
